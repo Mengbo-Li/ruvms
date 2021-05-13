@@ -69,4 +69,5 @@ Mengbo Li <mengbo.li@outlook.com>
 
 \examples{
 
-normalised <- ruvms(Y = rawData, M, ctl)
+## NOT RUN
+# normalised <- ruvms(Y = esc, M, ctl)

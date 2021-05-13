@@ -10,5 +10,5 @@ noNA(x)
 Check if there is any missing value in the negative control matrix.
 }
 \examples{
-noNA(x = rawY[, ctl])
+noNA(x = esc[, 1:10])
 }
