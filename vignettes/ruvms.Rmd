@@ -1,7 +1,7 @@
 ---
-title: "Untitled"
+title: "*ruvms*: Removing unwanted variation in mass spectrometry data"
 author: "Mengbo Li"
-date: "13/05/2021"
+date: "`r Sys.Date()`"
 output: html_document
 ---
 
