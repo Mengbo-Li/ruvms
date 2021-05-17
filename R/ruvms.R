@@ -9,18 +9,17 @@ ruvms <- function (Y,
                    return.info = FALSE,
                    inputcheck = FALSE) {
 
+   if (is.data.frame(Y)) { Y <- data.matrix(Y)  }
+   m <- nrow(Y)
+   n <- ncol(Y)
+   ctl <- ctl & apply(Y, 2, noNA)
+
    if (inputcheck) {
       if (m > n)
          warning("m is greater than n! This is not a problem itself, but may indicate that you need to transpose your data matrix. Please ensure that rows correspond to observations (e.g. sample ID) and columns correspond to features (e.g. proteins).")
       if (sum(Y == Inf, na.rm = TRUE) + sum(Y == -Inf, na.rm = TRUE) > 0)
          stop("Y contains infinities. This is not supported.")
    }
-   if (is.data.frame(Y)) { Y <- data.matrix(Y)  }
-
-   m <- nrow(Y)
-   n <- ncol(Y)
-   ctl <- ctl & apply(Y, 2, noNA)
-
    if (!is.null(eta)) {
       adjustments <- Y - RUV1(Y, eta, ctl, include.intercept = include.intercept)
       Y <- RUV1(Y, eta, ctl, include.intercept = include.intercept)
