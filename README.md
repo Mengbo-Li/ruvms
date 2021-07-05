@@ -15,7 +15,7 @@ Sydney Heart Bank (SHB) proteomics data:
 Li, M., Parker, B. L., Pearson, E., Hunter, B., Cao, J., Koay, Y. C., ... & 
 O’Sullivan, J. F. (2020). Core functional nodes and sex-specific pathways in 
 human ischaemic and dilated cardiomyopathy. *Nature communications*, 11(1), 
-1-12.
+1-12. DOI: https://doi.org/10.1038/s41467-020-16584-z. 
 
 ## Usage
 
