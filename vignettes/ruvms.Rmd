@@ -53,7 +53,6 @@ library(naniar)
 library(ggpubr)
 library(ruvms)
 library(limma)
-library(DT)
 require(ruv)
 require(Rfast)
 require(Matrix)
@@ -76,14 +75,14 @@ head(smpinfo)
 
 Here we demonstrate the workflow using the SHB proteomics data. 
 
-(0.1) Log2 transformation
+## Log2 transformation
 
 ```{r}
 raw <- log2(raw)
 raw[1:5, 1:5]
 ```
 
-(0.2) Missing data patterns
+## Missing data patterns
 
 - Total proportion of missingness: 
 
@@ -111,7 +110,7 @@ ggplot(data.frame(x = rowSums(is.na(raw))/ncol(raw)), aes(x = x)) +
 
 
 
-1. Choosing negative control measurements. 
+## Choose negative controls
 
 Here, we use the low sample variance proteins as the negative controls: 
 
@@ -120,7 +119,7 @@ ctl <- colVars(raw) <= quantile(colVars(raw, na.rm = TRUE), probs = 0.25, na.rm 
 table(ctl)
 ```
 
-2. Identify the replication structure
+## Identify the replication structure
 
 The SHB data set contains 70 samples, where 7 of them have one replicate. 
 
@@ -131,7 +130,7 @@ rownames(M) <- smpinfo$locBank
 dim(M)
 ```
 
-3. Perform `ruvms` normalisation
+## Perform `ruvms` normalisation
 
 ```{r}
 normed <- ruvms(raw, M, ctl)
@@ -139,9 +138,9 @@ normed[1:5, 1:5]
 ```
 
 
-## Diagnostics
+# Diagnostics
 
-(i) PCA 
+## PCA 
 
 Normalisation is performed on the data set with missingness, but PCA is produced by subsetting the raw and normalised data to complete subsets. 
 
@@ -162,9 +161,9 @@ pca_norm <- ggPCA(normed[, colSums(is.na(normed)) == 0]) + ggtitle("Normalised d
 ggarrange(pca_raw, pca_norm, ncol = 2)
 ```
 
-It is shown that conditions in `ruvms` normalised data are better separated. 
+It is shown that conditions in `ruvms` normalised data are better separated, especially the donor samples. 
 
-(ii) RLA
+## RLA
 
 ```{r, fig.width=13, fig.height=4}
 par(mfrow = c(1, 2))
@@ -176,7 +175,7 @@ RLA(normed, repCol = brewer.pal(3, "Dark2")[smpinfo$condition], repLabel = uniqu
 
 Ideally, given a properly normalised data matrix, RLA boxplots are expected to be aligned around zero, and the widths of the boxplots should be relatively narrow and concordant with each other. We can see in our example, not only are the RLA boxplots better aligned at zero, but the widths of the of the boxplots are shrinked and more concordant post normalisation. 
 
-(iii) TRA
+## TRA
 
 TRA boxplots measure the similarity among replications of the same effective sample. The widths of TRA boxplots are proportional to variations among technical replicates. Provided effective removal of unwanted variations from data, technical replicates are expected to be identical after normalisation. 
 
@@ -204,7 +203,7 @@ We can see that the variations within the same condition are reduced after norma
 
 Something extra: In `ruv::RUVIII`, the `k` parameter determines the amount of adjustment performed on the raw data set. The TRA plots are also useful to show that the larger `k` is, the more similar technical replications are after normalisation. That is, the heights of the TRA boxplots become smaller as `k` increases to its maximum. 
 
-(iv) MDA plots
+## MDA plots
 
 The MDA plots shows how the median of each measurement shifts before and after normalisation. MDA plots are useful for the selection of the `lambda` parameter when `standardise` is disabled: 
 
@@ -216,7 +215,7 @@ ruvms_w_lambda <- ruvms(raw, M, ctl, standardise = FALSE)
 MDA(raw, ruvms_w_lambda, outline = TRUE, guides = 0, title = "lambda = 1e-5")
 ```
 
-We can see that there are huge shifts in the range of each protein after normalisation when there is no $lambda$-regularisation. A very small $lambda$-regularisation helps. 
+We can see that there are huge shifts in the range of each protein after normalisation when there is no lambda-regularisation. A very small lambda-regularisation helps. 
 
 
 
@@ -237,14 +236,20 @@ contrasts <- makeContrasts(DCM = conditionDCM - conditionDonor,
 fit <- lmFit(t(normed_avg), design)
 cfit <- contrasts.fit(fit, contrasts = contrasts)
 efit <- eBayes(cfit)
-
-dcm_top <- signif(topTable(efit, coef = "DCM", number = 20), 2)
-datatable(dcm_top, caption = "Top 20 differentially abundant proteins in DCM hearts versus healthy donors")
-
-icm_top <- signif(topTable(efit, coef = "ICM", number = 20), 2)
-datatable(icm_top, caption = "Top 20 differentially abundant proteins in ICM hearts versus healthy donors")
 ```
 
+## DCM vs Donor
+
+```{r}
+signif(topTable(efit, coef = "DCM", number = 20), 2)
+```
+
+
+## ICM vs Donor
+
+```{r}
+signif(topTable(efit, coef = "ICM", number = 20), 2)
+```
 
 
 

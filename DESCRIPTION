@@ -16,7 +16,7 @@ Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.6)
 Imports: Rfast, ruv, Matrix
-Suggests: knitr, markdown, tidyverse, naniar, limma
+Suggests: knitr, markdown, tidyverse, limma
 biocViews: MassSpectrometry, DataNormalisation, MissingData
 VignetteBuilder: knitr
 URL: https://github.com/Mengbo-Li/ruvms

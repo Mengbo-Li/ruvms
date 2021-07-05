@@ -67,11 +67,7 @@
 
       
 
-      </header><script src="ruvms_files/header-attrs-2.9/header-attrs.js"></script><script src="ruvms_files/htmlwidgets-1.5.3/htmlwidgets.js"></script><script src="ruvms_files/jquery-3.5.1/jquery.min.js"></script><link href="ruvms_files/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
-<script src="ruvms_files/datatables-binding-0.18/datatables.js"></script><link href="ruvms_files/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet">
-<link href="ruvms_files/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet">
-<script src="ruvms_files/dt-core-1.10.20/js/jquery.dataTables.min.js"></script><link href="ruvms_files/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet">
-<script src="ruvms_files/crosstalk-1.1.1/js/crosstalk.min.js"></script><div class="row">
+      </header><script src="ruvms_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>
@@ -109,7 +105,6 @@
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rpkgs.datanovia.com/ggpubr/">ggpubr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Mengbo-Li/ruvms">ruvms</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://bioinf.wehi.edu.au/limma">limma</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstudio/DT">DT</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va"><a href="http://www-personal.umich.edu/~johanngb/ruv/">ruv</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RfastOfficial/Rfast">Rfast</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va"><a href="http://Matrix.R-forge.R-project.org/">Matrix</a></span><span class="op">)</span></code></pre></div>
@@ -143,7 +138,9 @@
 <h1 class="hasAnchor">
 <a href="#pre-processing-and-data-normalisation" class="anchor"></a>Pre-processing and data normalisation</h1>
 <p>Here we demonstrate the workflow using the SHB proteomics data.</p>
-<p>(0.1) Log2 transformation</p>
+<div id="log2-transformation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#log2-transformation" class="anchor"></a>Log2 transformation</h2>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>raw <span class="ot">&lt;-</span> <span class="fu">log2</span>(raw)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>raw[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>   A0A024QZX5<span class="sc">~</span>SERPINB6 A0A024R216<span class="sc">~</span>HDGFRP3 A0A024R442<span class="sc">~</span>DNPEP A0A024R4E5<span class="sc">~</span>HDLBP A0A024R4K9<span class="sc">~</span>TMEM120A</span>
@@ -152,7 +149,10 @@
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="dv">8</span>                 <span class="fl">17.3</span>               <span class="fl">16.0</span>             <span class="fl">16.3</span>             <span class="fl">14.5</span>                <span class="fl">15.9</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="dv">9</span>                 <span class="fl">17.9</span>               <span class="fl">16.3</span>             <span class="fl">16.8</span>             <span class="fl">14.7</span>                <span class="fl">16.0</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="dv">14</span>                <span class="fl">17.7</span>               <span class="fl">15.9</span>             <span class="fl">16.6</span>             <span class="fl">14.2</span>                <span class="fl">16.0</span></span></code></pre></div>
-<p>(0.2) Missing data patterns</p>
+</div>
+<div id="missing-data-patterns" class="section level2">
+<h2 class="hasAnchor">
+<a href="#missing-data-patterns" class="anchor"></a>Missing data patterns</h2>
 <ul>
 <li>Total proportion of missingness:</li>
 </ul>
@@ -173,9 +173,10 @@
     <span class="fu">geom_histogram</span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">+</span> <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Proportion of NA proteins"</span>,
     y <span class="op">=</span> <span class="st">"Count"</span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Proportion of NA proteins in each sample (p = 3,263)"</span><span class="op">)</span></code></pre></div>
 <p><img src="ruvms_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
-<ol style="list-style-type: decimal">
-<li>Choosing negative control measurements.</li>
-</ol>
+</div>
+<div id="choose-negative-controls" class="section level2">
+<h2 class="hasAnchor">
+<a href="#choose-negative-controls" class="anchor"></a>Choose negative controls</h2>
 <p>Here, we use the low sample variance proteins as the negative controls:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ctl <span class="ot">&lt;-</span> <span class="fu">colVars</span>(raw) <span class="sc">&lt;=</span> <span class="fu">quantile</span>(<span class="fu">colVars</span>(raw, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">probs =</span> <span class="fl">0.25</span>,</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
@@ -183,9 +184,10 @@
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>ctl</span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="cn">FALSE</span>  <span class="cn">TRUE</span> </span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a> <span class="dv">1050</span>   <span class="dv">624</span> </span></code></pre></div>
-<ol start="2" style="list-style-type: decimal">
-<li>Identify the replication structure</li>
-</ol>
+</div>
+<div id="identify-the-replication-structure" class="section level2">
+<h2 class="hasAnchor">
+<a href="#identify-the-replication-structure" class="anchor"></a>Identify the replication structure</h2>
 <p>The SHB data set contains 70 samples, where 7 of them have one replicate.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">duplicated</span>(smpinfo<span class="sc">$</span>locBank))</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="dv">7</span></span>
@@ -193,9 +195,10 @@
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(M) <span class="ot">&lt;-</span> smpinfo<span class="sc">$</span>locBank</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(M)</span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="dv">70</span> <span class="dv">63</span></span></code></pre></div>
-<ol start="3" style="list-style-type: decimal">
-<li>Perform <code>ruvms</code> normalisation</li>
-</ol>
+</div>
+<div id="perform-ruvms-normalisation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#perform-ruvms-normalisation" class="anchor"></a>Perform <code>ruvms</code> normalisation</h2>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>normed <span class="ot">&lt;-</span> <span class="fu">ruvms</span>(raw, M, ctl)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>normed[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>   A0A024QZX5<span class="sc">~</span>SERPINB6 A0A024R216<span class="sc">~</span>HDGFRP3 A0A024R442<span class="sc">~</span>DNPEP A0A024R4E5<span class="sc">~</span>HDLBP A0A024R4K9<span class="sc">~</span>TMEM120A</span>
@@ -204,12 +207,14 @@
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="dv">8</span>                 <span class="fl">17.4</span>               <span class="fl">16.1</span>             <span class="fl">16.3</span>             <span class="fl">14.6</span>                <span class="fl">15.8</span></span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="dv">9</span>                 <span class="fl">17.9</span>               <span class="fl">16.4</span>             <span class="fl">16.8</span>             <span class="fl">14.7</span>                <span class="fl">16.0</span></span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="dv">14</span>                <span class="fl">17.6</span>               <span class="fl">16.0</span>             <span class="fl">16.6</span>             <span class="fl">14.4</span>                <span class="fl">15.8</span></span></code></pre></div>
-<div id="diagnostics" class="section level2">
+</div>
+</div>
+<div id="diagnostics" class="section level1">
+<h1 class="hasAnchor">
+<a href="#diagnostics" class="anchor"></a>Diagnostics</h1>
+<div id="pca" class="section level2">
 <h2 class="hasAnchor">
-<a href="#diagnostics" class="anchor"></a>Diagnostics</h2>
-<ol style="list-style-type: lower-roman">
-<li>PCA</li>
-</ol>
+<a href="#pca" class="anchor"></a>PCA</h2>
 <p>Normalisation is performed on the data set with missingness, but PCA is produced by subsetting the raw and normalised data to complete subsets.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">gg_additions_heart</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>color <span class="op">=</span> <span class="va">smpinfo</span><span class="op">$</span><span class="va">condition</span>, shape <span class="op">=</span> <span class="va">smpinfo</span><span class="op">$</span><span class="va">location</span>,
@@ -227,10 +232,11 @@
 <span class="va">pca_norm</span> <span class="op">&lt;-</span> <span class="fu">ggPCA</span><span class="op">(</span><span class="va">normed</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html">colSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">normed</span><span class="op">)</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Normalised data"</span><span class="op">)</span>
 <span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html">ggarrange</a></span><span class="op">(</span><span class="va">pca_raw</span>, <span class="va">pca_norm</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <p><img src="ruvms_files/figure-html/unnamed-chunk-11-1.png" width="1152"></p>
-<p>It is shown that conditions in <code>ruvms</code> normalised data are better separated.</p>
-<ol start="2" style="list-style-type: lower-roman">
-<li>RLA</li>
-</ol>
+<p>It is shown that conditions in <code>ruvms</code> normalised data are better separated, especially the donor samples.</p>
+</div>
+<div id="rla" class="section level2">
+<h2 class="hasAnchor">
+<a href="#rla" class="anchor"></a>RLA</h2>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/RLA.html">RLA</a></span><span class="op">(</span><span class="va">raw</span>, repCol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html">brewer.pal</a></span><span class="op">(</span><span class="fl">3</span>, <span class="st">"Dark2"</span><span class="op">)</span><span class="op">[</span><span class="va">smpinfo</span><span class="op">$</span><span class="va">condition</span><span class="op">]</span>,
@@ -241,9 +247,10 @@
     ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>, guides <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="ruvms_files/figure-html/unnamed-chunk-12-1.png" width="1248"></p>
 <p>Ideally, given a properly normalised data matrix, RLA boxplots are expected to be aligned around zero, and the widths of the boxplots should be relatively narrow and concordant with each other. We can see in our example, not only are the RLA boxplots better aligned at zero, but the widths of the of the boxplots are shrinked and more concordant post normalisation.</p>
-<ol start="3" style="list-style-type: lower-roman">
-<li>TRA</li>
-</ol>
+</div>
+<div id="tra" class="section level2">
+<h2 class="hasAnchor">
+<a href="#tra" class="anchor"></a>TRA</h2>
 <p>TRA boxplots measure the similarity among replications of the same effective sample. The widths of TRA boxplots are proportional to variations among technical replicates. Provided effective removal of unwanted variations from data, technical replicates are expected to be identical after normalisation.</p>
 <p>The <code>ruvms</code> normalisation makes technical replications the same, thereby the widths of the TRA boxplots are zero after normalisation.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
@@ -282,9 +289,10 @@
 <p><img src="ruvms_files/figure-html/unnamed-chunk-14-1.png" width="672"></p>
 <p>We can see that the variations within the same condition are reduced after normalisation.</p>
 <p>Something extra: In <code><a href="https://rdrr.io/pkg/ruv/man/RUVIII.html">ruv::RUVIII</a></code>, the <code>k</code> parameter determines the amount of adjustment performed on the raw data set. The TRA plots are also useful to show that the larger <code>k</code> is, the more similar technical replications are after normalisation. That is, the heights of the TRA boxplots become smaller as <code>k</code> increases to its maximum.</p>
-<ol start="4" style="list-style-type: lower-roman">
-<li>MDA plots</li>
-</ol>
+</div>
+<div id="mda-plots" class="section level2">
+<h2 class="hasAnchor">
+<a href="#mda-plots" class="anchor"></a>MDA plots</h2>
 <p>The MDA plots shows how the median of each measurement shifts before and after normalisation. MDA plots are useful for the selection of the <code>lambda</code> parameter when <code>standardise</code> is disabled:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>
@@ -293,7 +301,7 @@
 <span class="va">ruvms_w_lambda</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ruvms.html">ruvms</a></span><span class="op">(</span><span class="va">raw</span>, <span class="va">M</span>, <span class="va">ctl</span>, standardise <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="fu"><a href="../reference/MDA.html">MDA</a></span><span class="op">(</span><span class="va">raw</span>, <span class="va">ruvms_w_lambda</span>, outline <span class="op">=</span> <span class="cn">TRUE</span>, guides <span class="op">=</span> <span class="fl">0</span>, title <span class="op">=</span> <span class="st">"lambda = 1e-5"</span><span class="op">)</span></code></pre></div>
 <p><img src="ruvms_files/figure-html/unnamed-chunk-15-1.png" width="672"></p>
-<p>We can see that there are huge shifts in the range of each protein after normalisation when there is no <span class="math inline">\(lambda\)</span>-regularisation. A very small <span class="math inline">\(lambda\)</span>-regularisation helps.</p>
+<p>We can see that there are huge shifts in the range of each protein after normalisation when there is no lambda-regularisation. A very small lambda-regularisation helps.</p>
 </div>
 </div>
 <div id="differential-expression-analysis" class="section level1">
@@ -311,16 +319,59 @@
 
 <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/lmFit.html">lmFit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">normed_avg</span><span class="op">)</span>, <span class="va">design</span><span class="op">)</span>
 <span class="va">cfit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/contrasts.fit.html">contrasts.fit</a></span><span class="op">(</span><span class="va">fit</span>, contrasts <span class="op">=</span> <span class="va">contrasts</span><span class="op">)</span>
-<span class="va">efit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/ebayes.html">eBayes</a></span><span class="op">(</span><span class="va">cfit</span><span class="op">)</span>
-
-<span class="va">dcm_top</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">signif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html">topTable</a></span><span class="op">(</span><span class="va">efit</span>, coef <span class="op">=</span> <span class="st">"DCM"</span>, number <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>,
-    <span class="fl">2</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/DT/man/datatable.html">datatable</a></span><span class="op">(</span><span class="va">dcm_top</span>, caption <span class="op">=</span> <span class="st">"Top 20 differentially abundant proteins in DCM hearts versus healthy donors"</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-a2a1f5468466a2e83ba4" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-a2a1f5468466a2e83ba4">{"x":{"filter":"none","caption":"<caption>Top 20 differentially abundant proteins in DCM hearts versus healthy donors<\/caption>","data":[["Q12805~EFEMP1","P04275~VWF","P02787~TF","G3V4U0~FBLN5","P39060~COL18A1","P12110~COL6A2","Q15063~POSTN","P02768~ALB","P35663~CYLC1","P01008~SERPINC1","P13611~VCAN","A0A087X0S5~COL6A1","P04196~HRG","Q16610~ECM1","P12111~COL6A3","O75380~NDUFS6","Q9HCH3~CPNE5","Q02750~MAP2K1","P04217~A1BG","K7ES70~MFAP4"],[1.9,1.4,1.1,1.3,1.1,1.1,2.4,0.89,1,0.77,1.6,1,1.1,1,0.99,-0.31,1.9,-0.39,1.1,1.6],[17,16,21,18,18,22,18,27,18,18,17,21,18,14,21,20,14,17,18,20],[10,8.4,8.4,8.2,8,7.9,7.5,7.4,7.4,7.2,7.2,7.2,7.2,7.4,7.1,-7.1,9.8,-7,7,7],[1.7e-14,7.5e-12,9.3e-12,1.6e-11,4.5e-11,7.2e-11,3.1e-10,4.3e-10,5.5e-10,1.1e-09,1.1e-09,1.1e-09,1.2e-09,1.4e-09,1.4e-09,1.8e-09,9.6e-10,2e-09,2.2e-09,2.6e-09],[5.5e-11,1e-08,1e-08,1.3e-08,2.9e-08,3.9e-08,1.4e-07,1.8e-07,2e-07,2.8e-07,2.8e-07,2.8e-07,2.8e-07,2.9e-07,2.9e-07,3.4e-07,2.8e-07,3.5e-07,3.8e-07,4.3e-07],[23,17,17,16,15,15,13,13,13,12,12,12,12,12,12,11,11,11,11,11]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>logFC<\/th>\n      <th>AveExpr<\/th>\n      <th>t<\/th>\n      <th>P.Value<\/th>\n      <th>adj.P.Val<\/th>\n      <th>B<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
-
-icm_top </div>
-<script type="application/json" data-for="htmlwidget-4f9de3942dbfa8de1450">{"x":{"filter":"none","caption":"<caption>Top 20 differentially abundant proteins in ICM hearts versus healthy donors<\/caption>","data":[["P0DJI8~SAA1","Q12805~EFEMP1","P04275~VWF","P02787~TF","P12110~COL6A2","P04196~HRG","A0A0B4J2C3~TPT1","P35663~CYLC1","Q96DZ1~ERLEC1","A0A087X0S5~COL6A1","P39060~COL18A1","A0A140TA41~TNXB","P12111~COL6A3","P08237~PFKM","G3V4U0~FBLN5","P29622~SERPINA4","P01008~SERPINC1","P19367~HK1","P06727~APOA4","P02768~ALB"],[-3.5,1.5,1.3,1,0.94,1,-0.31,0.93,0.33,0.91,0.85,0.95,0.84,-0.38,0.94,1.1,0.63,0.34,1.4,0.69],[17,17,16,21,22,18,18,18,14,21,18,18,21,21,18,16,18,21,17,27],[-10,8.5,8.2,8.1,7,6.8,-6.8,6.6,6.4,6.3,6.2,6.1,6.1,-6,6,6.1,5.9,5.9,5.8,5.8],[1.5e-14,1.3e-11,2.1e-11,2.4e-11,2.1e-09,5e-09,6.4e-09,1.2e-08,2.5e-08,4e-08,5.9e-08,8.5e-08,9.1e-08,1e-07,1.2e-07,1.2e-07,1.6e-07,1.8e-07,2.8e-07,3e-07],[4.9e-11,2e-08,2e-08,2e-08,1.3e-06,2.7e-06,3e-06,4.7e-06,8.9e-06,1.3e-05,1.7e-05,2.3e-05,2.3e-05,2.4e-05,2.5e-05,2.5e-05,3e-05,3.2e-05,4.6e-05,4.6e-05],[22,16,16,16,11,10,10,9.7,9,8.5,8.1,7.8,7.7,7.6,7.5,7.5,7.2,7.1,6.7,6.6]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>logFC<\/th>\n      <th>AveExpr<\/th>\n      <th>t<\/th>\n      <th>P.Value<\/th>\n      <th>adj.P.Val<\/th>\n      <th>B<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<span class="va">efit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/ebayes.html">eBayes</a></span><span class="op">(</span><span class="va">cfit</span><span class="op">)</span></code></pre></div>
+<div id="dcm-vs-donor" class="section level2">
+<h2 class="hasAnchor">
+<a href="#dcm-vs-donor" class="anchor"></a>DCM vs Donor</h2>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">signif</span>(<span class="fu">topTable</span>(efit, <span class="at">coef =</span> <span class="st">"DCM"</span>, <span class="at">number =</span> <span class="dv">20</span>), <span class="dv">2</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                  logFC AveExpr    t P.Value adj.P.Val  B</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>Q12805<span class="sc">~</span>EFEMP1      <span class="fl">1.90</span>      <span class="dv">17</span> <span class="fl">10.0</span> <span class="fl">1.7e-14</span>   <span class="fl">5.5e-11</span> <span class="dv">23</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>P04275<span class="sc">~</span>VWF         <span class="fl">1.40</span>      <span class="dv">16</span>  <span class="fl">8.4</span> <span class="fl">7.5e-12</span>   <span class="fl">1.0e-08</span> <span class="dv">17</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>P02787<span class="sc">~</span>TF          <span class="fl">1.10</span>      <span class="dv">21</span>  <span class="fl">8.4</span> <span class="fl">9.3e-12</span>   <span class="fl">1.0e-08</span> <span class="dv">17</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>G3V4U0<span class="sc">~</span>FBLN5       <span class="fl">1.30</span>      <span class="dv">18</span>  <span class="fl">8.2</span> <span class="fl">1.6e-11</span>   <span class="fl">1.3e-08</span> <span class="dv">16</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>P39060<span class="sc">~</span>COL18A1     <span class="fl">1.10</span>      <span class="dv">18</span>  <span class="fl">8.0</span> <span class="fl">4.5e-11</span>   <span class="fl">2.9e-08</span> <span class="dv">15</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>P12110<span class="sc">~</span>COL6A2      <span class="fl">1.10</span>      <span class="dv">22</span>  <span class="fl">7.9</span> <span class="fl">7.2e-11</span>   <span class="fl">3.9e-08</span> <span class="dv">15</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>Q15063<span class="sc">~</span>POSTN       <span class="fl">2.40</span>      <span class="dv">18</span>  <span class="fl">7.5</span> <span class="fl">3.1e-10</span>   <span class="fl">1.4e-07</span> <span class="dv">13</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>P02768<span class="sc">~</span>ALB         <span class="fl">0.89</span>      <span class="dv">27</span>  <span class="fl">7.4</span> <span class="fl">4.3e-10</span>   <span class="fl">1.8e-07</span> <span class="dv">13</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>P35663<span class="sc">~</span>CYLC1       <span class="fl">1.00</span>      <span class="dv">18</span>  <span class="fl">7.4</span> <span class="fl">5.5e-10</span>   <span class="fl">2.0e-07</span> <span class="dv">13</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>P01008<span class="sc">~</span>SERPINC1    <span class="fl">0.77</span>      <span class="dv">18</span>  <span class="fl">7.2</span> <span class="fl">1.1e-09</span>   <span class="fl">2.8e-07</span> <span class="dv">12</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>P13611<span class="sc">~</span>VCAN        <span class="fl">1.60</span>      <span class="dv">17</span>  <span class="fl">7.2</span> <span class="fl">1.1e-09</span>   <span class="fl">2.8e-07</span> <span class="dv">12</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>A0A087X0S5<span class="sc">~</span>COL6A1  <span class="fl">1.00</span>      <span class="dv">21</span>  <span class="fl">7.2</span> <span class="fl">1.1e-09</span>   <span class="fl">2.8e-07</span> <span class="dv">12</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>P04196<span class="sc">~</span>HRG         <span class="fl">1.10</span>      <span class="dv">18</span>  <span class="fl">7.2</span> <span class="fl">1.2e-09</span>   <span class="fl">2.8e-07</span> <span class="dv">12</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>Q16610<span class="sc">~</span>ECM1        <span class="fl">1.00</span>      <span class="dv">14</span>  <span class="fl">7.4</span> <span class="fl">1.4e-09</span>   <span class="fl">2.9e-07</span> <span class="dv">12</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>P12111<span class="sc">~</span>COL6A3      <span class="fl">0.99</span>      <span class="dv">21</span>  <span class="fl">7.1</span> <span class="fl">1.4e-09</span>   <span class="fl">2.9e-07</span> <span class="dv">12</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>O75380<span class="sc">~</span>NDUFS6     <span class="sc">-</span><span class="fl">0.31</span>      <span class="dv">20</span> <span class="sc">-</span><span class="fl">7.1</span> <span class="fl">1.8e-09</span>   <span class="fl">3.4e-07</span> <span class="dv">11</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>Q9HCH3<span class="sc">~</span>CPNE5       <span class="fl">1.90</span>      <span class="dv">14</span>  <span class="fl">9.8</span> <span class="fl">9.6e-10</span>   <span class="fl">2.8e-07</span> <span class="dv">11</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>Q02750<span class="sc">~</span>MAP2K1     <span class="sc">-</span><span class="fl">0.39</span>      <span class="dv">17</span> <span class="sc">-</span><span class="fl">7.0</span> <span class="fl">2.0e-09</span>   <span class="fl">3.5e-07</span> <span class="dv">11</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>P04217<span class="sc">~</span>A1BG        <span class="fl">1.10</span>      <span class="dv">18</span>  <span class="fl">7.0</span> <span class="fl">2.2e-09</span>   <span class="fl">3.8e-07</span> <span class="dv">11</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>K7ES70<span class="sc">~</span>MFAP4       <span class="fl">1.60</span>      <span class="dv">20</span>  <span class="fl">7.0</span> <span class="fl">2.6e-09</span>   <span class="fl">4.3e-07</span> <span class="dv">11</span></span></code></pre></div>
+</div>
+<div id="icm-vs-donor" class="section level2">
+<h2 class="hasAnchor">
+<a href="#icm-vs-donor" class="anchor"></a>ICM vs Donor</h2>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">signif</span>(<span class="fu">topTable</span>(efit, <span class="at">coef =</span> <span class="st">"ICM"</span>, <span class="at">number =</span> <span class="dv">20</span>), <span class="dv">2</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                  logFC AveExpr     t P.Value adj.P.Val    B</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>P0DJI8<span class="sc">~</span>SAA1       <span class="sc">-</span><span class="fl">3.50</span>      <span class="dv">17</span> <span class="sc">-</span><span class="fl">10.0</span> <span class="fl">1.5e-14</span>   <span class="fl">4.9e-11</span> <span class="fl">22.0</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>Q12805<span class="sc">~</span>EFEMP1      <span class="fl">1.50</span>      <span class="dv">17</span>   <span class="fl">8.5</span> <span class="fl">1.3e-11</span>   <span class="fl">2.0e-08</span> <span class="fl">16.0</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>P04275<span class="sc">~</span>VWF         <span class="fl">1.30</span>      <span class="dv">16</span>   <span class="fl">8.2</span> <span class="fl">2.1e-11</span>   <span class="fl">2.0e-08</span> <span class="fl">16.0</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>P02787<span class="sc">~</span>TF          <span class="fl">1.00</span>      <span class="dv">21</span>   <span class="fl">8.1</span> <span class="fl">2.4e-11</span>   <span class="fl">2.0e-08</span> <span class="fl">16.0</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>P12110<span class="sc">~</span>COL6A2      <span class="fl">0.94</span>      <span class="dv">22</span>   <span class="fl">7.0</span> <span class="fl">2.1e-09</span>   <span class="fl">1.3e-06</span> <span class="fl">11.0</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>P04196<span class="sc">~</span>HRG         <span class="fl">1.00</span>      <span class="dv">18</span>   <span class="fl">6.8</span> <span class="fl">5.0e-09</span>   <span class="fl">2.7e-06</span> <span class="fl">10.0</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>A0A0B4J2C3<span class="sc">~</span>TPT1   <span class="sc">-</span><span class="fl">0.31</span>      <span class="dv">18</span>  <span class="sc">-</span><span class="fl">6.8</span> <span class="fl">6.4e-09</span>   <span class="fl">3.0e-06</span> <span class="fl">10.0</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>P35663<span class="sc">~</span>CYLC1       <span class="fl">0.93</span>      <span class="dv">18</span>   <span class="fl">6.6</span> <span class="fl">1.2e-08</span>   <span class="fl">4.7e-06</span>  <span class="fl">9.7</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>Q96DZ1<span class="sc">~</span>ERLEC1      <span class="fl">0.33</span>      <span class="dv">14</span>   <span class="fl">6.4</span> <span class="fl">2.5e-08</span>   <span class="fl">8.9e-06</span>  <span class="fl">9.0</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>A0A087X0S5<span class="sc">~</span>COL6A1  <span class="fl">0.91</span>      <span class="dv">21</span>   <span class="fl">6.3</span> <span class="fl">4.0e-08</span>   <span class="fl">1.3e-05</span>  <span class="fl">8.5</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>P39060<span class="sc">~</span>COL18A1     <span class="fl">0.85</span>      <span class="dv">18</span>   <span class="fl">6.2</span> <span class="fl">5.9e-08</span>   <span class="fl">1.7e-05</span>  <span class="fl">8.1</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>A0A140TA41<span class="sc">~</span>TNXB    <span class="fl">0.95</span>      <span class="dv">18</span>   <span class="fl">6.1</span> <span class="fl">8.5e-08</span>   <span class="fl">2.3e-05</span>  <span class="fl">7.8</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>P12111<span class="sc">~</span>COL6A3      <span class="fl">0.84</span>      <span class="dv">21</span>   <span class="fl">6.1</span> <span class="fl">9.1e-08</span>   <span class="fl">2.3e-05</span>  <span class="fl">7.7</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>P08237<span class="sc">~</span>PFKM       <span class="sc">-</span><span class="fl">0.38</span>      <span class="dv">21</span>  <span class="sc">-</span><span class="fl">6.0</span> <span class="fl">1.0e-07</span>   <span class="fl">2.4e-05</span>  <span class="fl">7.6</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>G3V4U0<span class="sc">~</span>FBLN5       <span class="fl">0.94</span>      <span class="dv">18</span>   <span class="fl">6.0</span> <span class="fl">1.2e-07</span>   <span class="fl">2.5e-05</span>  <span class="fl">7.5</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>P29622<span class="sc">~</span>SERPINA4    <span class="fl">1.10</span>      <span class="dv">16</span>   <span class="fl">6.1</span> <span class="fl">1.2e-07</span>   <span class="fl">2.5e-05</span>  <span class="fl">7.5</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>P01008<span class="sc">~</span>SERPINC1    <span class="fl">0.63</span>      <span class="dv">18</span>   <span class="fl">5.9</span> <span class="fl">1.6e-07</span>   <span class="fl">3.0e-05</span>  <span class="fl">7.2</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>P19367<span class="sc">~</span>HK1         <span class="fl">0.34</span>      <span class="dv">21</span>   <span class="fl">5.9</span> <span class="fl">1.8e-07</span>   <span class="fl">3.2e-05</span>  <span class="fl">7.1</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>P06727<span class="sc">~</span>APOA4       <span class="fl">1.40</span>      <span class="dv">17</span>   <span class="fl">5.8</span> <span class="fl">2.8e-07</span>   <span class="fl">4.6e-05</span>  <span class="fl">6.7</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>P02768<span class="sc">~</span>ALB         <span class="fl">0.69</span>      <span class="dv">27</span>   <span class="fl">5.8</span> <span class="fl">3.0e-07</span>   <span class="fl">4.6e-05</span>  <span class="fl">6.6</span></span></code></pre></div>
+</div>
 </div>
 <div id="references" class="section level1">
 <h1 class="hasAnchor">
@@ -331,51 +382,49 @@ icm_top </div>
 <div id="session-information" class="section level1">
 <h1 class="hasAnchor">
 <a href="#session-information" class="anchor"></a>Session information</h1>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>R version <span class="dv">4</span>.<span class="fl">0.5</span> (<span class="dv">2021-03-31</span>)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>Platform<span class="sc">:</span> x86_64<span class="sc">-</span>apple<span class="sc">-</span><span class="fu">darwin17.0</span> (<span class="dv">64</span><span class="sc">-</span>bit)</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>Running under<span class="sc">:</span> macOS Catalina <span class="dv">10</span>.<span class="fl">15.7</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>Matrix products<span class="sc">:</span> default</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>BLAS<span class="sc">:</span>   <span class="er">/</span>System<span class="sc">/</span>Library<span class="sc">/</span>Frameworks<span class="sc">/</span>Accelerate.framework<span class="sc">/</span>Versions<span class="sc">/</span>A<span class="sc">/</span>Frameworks<span class="sc">/</span>vecLib.framework<span class="sc">/</span>Versions<span class="sc">/</span>A<span class="sc">/</span>libBLAS.dylib</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>LAPACK<span class="sc">:</span> <span class="er">/</span>Library<span class="sc">/</span>Frameworks<span class="sc">/</span>R.framework<span class="sc">/</span>Versions<span class="sc">/</span><span class="fl">4.0</span><span class="sc">/</span>Resources<span class="sc">/</span>lib<span class="sc">/</span>libRlapack.dylib</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>locale<span class="sc">:</span></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] en_AU.UTF<span class="dv">-8</span><span class="sc">/</span>en_AU.UTF<span class="dv">-8</span><span class="sc">/</span>en_AU.UTF<span class="dv">-8</span><span class="sc">/</span>C<span class="sc">/</span>en_AU.UTF<span class="dv">-8</span><span class="sc">/</span>en_AU.UTF<span class="dv">-8</span></span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>attached base packages<span class="sc">:</span></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] stats     graphics  grDevices utils     datasets  methods   base     </span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>other attached packages<span class="sc">:</span></span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a> [<span class="dv">1</span>] Matrix_1<span class="fl">.3</span><span class="dv">-4</span>       Rfast_2.<span class="fl">0.3</span>        RcppZiggurat_0.<span class="fl">1.6</span> Rcpp_1.<span class="fl">0.6</span>         ruv_0.<span class="dv">9</span>.<span class="fl">7.1</span>       </span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a> [<span class="dv">6</span>] DT_0<span class="fl">.18</span>            limma_3.<span class="fl">46.0</span>       ruvms_0.<span class="fl">1.0</span>        ggpubr_0.<span class="fl">4.0</span>       naniar_0.<span class="fl">6.1</span>      </span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>[<span class="dv">11</span>] RColorBrewer_1<span class="fl">.1</span><span class="dv">-2</span> forcats_0.<span class="fl">5.1</span>      stringr_1.<span class="fl">4.0</span>      dplyr_1.<span class="fl">0.7</span>        purrr_0.<span class="fl">3.4</span>       </span>
-<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>[<span class="dv">16</span>] readr_1.<span class="fl">4.0</span>        tidyr_1.<span class="fl">1.3</span>        tibble_3.<span class="fl">1.2</span>       ggplot2_3.<span class="fl">3.5</span>      tidyverse_1.<span class="fl">3.1</span>   </span>
-<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>[<span class="dv">21</span>] BiocStyle_2.<span class="fl">18.1</span>  </span>
-<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>loaded via a <span class="fu">namespace</span> (and not attached)<span class="sc">:</span></span>
-<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a> [<span class="dv">1</span>] fs_1.<span class="fl">5.0</span>            lubridate_1.<span class="fl">7.10</span>    httr_1.<span class="fl">4.2</span>          rprojroot_2.<span class="fl">0.2</span>    </span>
-<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a> [<span class="dv">5</span>] tools_4.<span class="fl">0.5</span>         backports_1.<span class="fl">2.1</span>     bslib_0.<span class="dv">2</span>.<span class="fl">5.1</span>       utf8_1.<span class="fl">2.1</span>         </span>
-<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a> [<span class="dv">9</span>] R6_2.<span class="fl">5.0</span>            DBI_1.<span class="fl">1.1</span>           colorspace_2<span class="fl">.0</span><span class="dv">-2</span>    withr_2.<span class="fl">4.2</span>        </span>
-<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>[<span class="dv">13</span>] gridExtra_2<span class="fl">.3</span>       tidyselect_1.<span class="fl">1.1</span>    curl_4.<span class="fl">3.2</span>          compiler_4.<span class="fl">0.5</span>     </span>
-<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>[<span class="dv">17</span>] textshaping_0.<span class="fl">3.5</span>   cli_3.<span class="fl">0.0</span>           rvest_1.<span class="fl">0.0</span>         formatR_1<span class="fl">.11</span>       </span>
-<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>[<span class="dv">21</span>] xml2_1.<span class="fl">3.2</span>          desc_1.<span class="fl">3.0</span>          labeling_0.<span class="fl">4.2</span>      bookdown_0<span class="fl">.22</span>      </span>
-<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>[<span class="dv">25</span>] sass_0.<span class="fl">4.0</span>          scales_1.<span class="fl">1.1</span>        pkgdown_1.<span class="fl">6.1</span>       systemfonts_1.<span class="fl">0.2</span>  </span>
-<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>[<span class="dv">29</span>] digest_0.<span class="fl">6.27</span>       foreign_0<span class="fl">.8</span><span class="dv">-81</span>      rmarkdown_2<span class="fl">.9</span>       rio_0.<span class="fl">5.27</span>         </span>
-<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>[<span class="dv">33</span>] pkgconfig_2.<span class="fl">0.3</span>     htmltools_0.<span class="dv">5</span>.<span class="fl">1.1</span>   highr_0<span class="fl">.9</span>           dbplyr_2.<span class="fl">1.1</span>       </span>
-<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>[<span class="dv">37</span>] fastmap_1.<span class="fl">1.0</span>       htmlwidgets_1.<span class="fl">5.3</span>   rlang_0.<span class="fl">4.11</span>        readxl_1.<span class="fl">3.1</span>       </span>
-<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>[<span class="dv">41</span>] rstudioapi_0<span class="fl">.13</span>     farver_2.<span class="fl">1.0</span>        jquerylib_0.<span class="fl">1.4</span>     generics_0.<span class="fl">1.0</span>     </span>
-<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>[<span class="dv">45</span>] jsonlite_1.<span class="fl">7.2</span>      crosstalk_1.<span class="fl">1.1</span>     zip_2.<span class="fl">2.0</span>           car_3<span class="fl">.0</span><span class="dv">-11</span>         </span>
-<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>[<span class="dv">49</span>] magrittr_2.<span class="fl">0.1</span>      munsell_0.<span class="fl">5.0</span>       fansi_0.<span class="fl">5.0</span>         abind_1<span class="fl">.4</span><span class="dv">-5</span>        </span>
-<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>[<span class="dv">53</span>] lifecycle_1.<span class="fl">0.0</span>     visdat_0.<span class="fl">5.3</span>        stringi_1.<span class="fl">6.2</span>       yaml_2.<span class="fl">2.1</span>         </span>
-<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>[<span class="dv">57</span>] carData_3<span class="fl">.0</span><span class="dv">-4</span>       grid_4.<span class="fl">0.5</span>          parallel_4.<span class="fl">0.5</span>      crayon_1.<span class="fl">4.1</span>       </span>
-<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>[<span class="dv">61</span>] lattice_0<span class="fl">.20</span><span class="dv">-44</span>     cowplot_1.<span class="fl">1.1</span>       haven_2.<span class="fl">4.1</span>         hms_1.<span class="fl">1.0</span>          </span>
-<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>[<span class="dv">65</span>] knitr_1<span class="fl">.33</span>          pillar_1.<span class="fl">6.1</span>        ggsignif_0.<span class="fl">6.2</span>      reprex_2.<span class="fl">0.0</span>       </span>
-<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>[<span class="dv">69</span>] glue_1.<span class="fl">4.2</span>          evaluate_0<span class="fl">.14</span>       data.table_1.<span class="fl">14.0</span>   BiocManager_1.<span class="fl">30.16</span></span>
-<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>[<span class="dv">73</span>] modelr_0.<span class="fl">1.8</span>        vctrs_0.<span class="fl">3.8</span>         cellranger_1.<span class="fl">1.0</span>    gtable_0.<span class="fl">3.0</span>       </span>
-<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a>[<span class="dv">77</span>] assertthat_0.<span class="fl">2.1</span>    cachem_1.<span class="fl">0.5</span>        xfun_0<span class="fl">.24</span>           openxlsx_4.<span class="fl">2.4</span>     </span>
-<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a>[<span class="dv">81</span>] broom_0.<span class="fl">7.8</span>         rstatix_0.<span class="fl">7.0</span>       ragg_1.<span class="fl">1.3</span>          memoise_2.<span class="fl">0.0</span>      </span>
-<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a>[<span class="dv">85</span>] ellipsis_0.<span class="fl">3.2</span>     </span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>R version <span class="dv">4</span>.<span class="fl">0.5</span> (<span class="dv">2021-03-31</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>Platform<span class="sc">:</span> x86_64<span class="sc">-</span>apple<span class="sc">-</span><span class="fu">darwin17.0</span> (<span class="dv">64</span><span class="sc">-</span>bit)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>Running under<span class="sc">:</span> macOS Catalina <span class="dv">10</span>.<span class="fl">15.7</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>Matrix products<span class="sc">:</span> default</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>BLAS<span class="sc">:</span>   <span class="er">/</span>System<span class="sc">/</span>Library<span class="sc">/</span>Frameworks<span class="sc">/</span>Accelerate.framework<span class="sc">/</span>Versions<span class="sc">/</span>A<span class="sc">/</span>Frameworks<span class="sc">/</span>vecLib.framework<span class="sc">/</span>Versions<span class="sc">/</span>A<span class="sc">/</span>libBLAS.dylib</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>LAPACK<span class="sc">:</span> <span class="er">/</span>Library<span class="sc">/</span>Frameworks<span class="sc">/</span>R.framework<span class="sc">/</span>Versions<span class="sc">/</span><span class="fl">4.0</span><span class="sc">/</span>Resources<span class="sc">/</span>lib<span class="sc">/</span>libRlapack.dylib</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>locale<span class="sc">:</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] en_AU.UTF<span class="dv">-8</span><span class="sc">/</span>en_AU.UTF<span class="dv">-8</span><span class="sc">/</span>en_AU.UTF<span class="dv">-8</span><span class="sc">/</span>C<span class="sc">/</span>en_AU.UTF<span class="dv">-8</span><span class="sc">/</span>en_AU.UTF<span class="dv">-8</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>attached base packages<span class="sc">:</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] stats     graphics  grDevices utils     datasets  methods   base     </span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>other attached packages<span class="sc">:</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a> [<span class="dv">1</span>] Matrix_1<span class="fl">.3</span><span class="dv">-4</span>       Rfast_2.<span class="fl">0.3</span>        RcppZiggurat_0.<span class="fl">1.6</span> Rcpp_1.<span class="fl">0.6</span>         ruv_0.<span class="dv">9</span>.<span class="fl">7.1</span>       </span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a> [<span class="dv">6</span>] limma_3.<span class="fl">46.0</span>       ruvms_0.<span class="fl">1.0</span>        ggpubr_0.<span class="fl">4.0</span>       naniar_0.<span class="fl">6.1</span>       RColorBrewer_1<span class="fl">.1</span><span class="dv">-2</span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>[<span class="dv">11</span>] forcats_0.<span class="fl">5.1</span>      stringr_1.<span class="fl">4.0</span>      dplyr_1.<span class="fl">0.7</span>        purrr_0.<span class="fl">3.4</span>        readr_1.<span class="fl">4.0</span>       </span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>[<span class="dv">16</span>] tidyr_1.<span class="fl">1.3</span>        tibble_3.<span class="fl">1.2</span>       ggplot2_3.<span class="fl">3.5</span>      tidyverse_1.<span class="fl">3.1</span>    BiocStyle_2.<span class="fl">18.1</span>  </span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>loaded via a <span class="fu">namespace</span> (and not attached)<span class="sc">:</span></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a> [<span class="dv">1</span>] fs_1.<span class="fl">5.0</span>            lubridate_1.<span class="fl">7.10</span>    httr_1.<span class="fl">4.2</span>          rprojroot_2.<span class="fl">0.2</span>    </span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a> [<span class="dv">5</span>] tools_4.<span class="fl">0.5</span>         backports_1.<span class="fl">2.1</span>     bslib_0.<span class="dv">2</span>.<span class="fl">5.1</span>       utf8_1.<span class="fl">2.1</span>         </span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a> [<span class="dv">9</span>] R6_2.<span class="fl">5.0</span>            DBI_1.<span class="fl">1.1</span>           colorspace_2<span class="fl">.0</span><span class="dv">-2</span>    withr_2.<span class="fl">4.2</span>        </span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>[<span class="dv">13</span>] gridExtra_2<span class="fl">.3</span>       tidyselect_1.<span class="fl">1.1</span>    curl_4.<span class="fl">3.2</span>          compiler_4.<span class="fl">0.5</span>     </span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>[<span class="dv">17</span>] textshaping_0.<span class="fl">3.5</span>   cli_3.<span class="fl">0.0</span>           rvest_1.<span class="fl">0.0</span>         formatR_1<span class="fl">.11</span>       </span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>[<span class="dv">21</span>] xml2_1.<span class="fl">3.2</span>          desc_1.<span class="fl">3.0</span>          labeling_0.<span class="fl">4.2</span>      bookdown_0<span class="fl">.22</span>      </span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>[<span class="dv">25</span>] sass_0.<span class="fl">4.0</span>          scales_1.<span class="fl">1.1</span>        pkgdown_1.<span class="fl">6.1</span>       systemfonts_1.<span class="fl">0.2</span>  </span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>[<span class="dv">29</span>] digest_0.<span class="fl">6.27</span>       foreign_0<span class="fl">.8</span><span class="dv">-81</span>      rmarkdown_2<span class="fl">.9</span>       rio_0.<span class="fl">5.27</span>         </span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>[<span class="dv">33</span>] pkgconfig_2.<span class="fl">0.3</span>     htmltools_0.<span class="dv">5</span>.<span class="fl">1.1</span>   highr_0<span class="fl">.9</span>           dbplyr_2.<span class="fl">1.1</span>       </span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>[<span class="dv">37</span>] fastmap_1.<span class="fl">1.0</span>       rlang_0.<span class="fl">4.11</span>        readxl_1.<span class="fl">3.1</span>        rstudioapi_0<span class="fl">.13</span>    </span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>[<span class="dv">41</span>] farver_2.<span class="fl">1.0</span>        jquerylib_0.<span class="fl">1.4</span>     generics_0.<span class="fl">1.0</span>      jsonlite_1.<span class="fl">7.2</span>     </span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>[<span class="dv">45</span>] zip_2.<span class="fl">2.0</span>           car_3<span class="fl">.0</span><span class="dv">-11</span>          magrittr_2.<span class="fl">0.1</span>      munsell_0.<span class="fl">5.0</span>      </span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>[<span class="dv">49</span>] fansi_0.<span class="fl">5.0</span>         abind_1<span class="fl">.4</span><span class="dv">-5</span>         lifecycle_1.<span class="fl">0.0</span>     visdat_0.<span class="fl">5.3</span>       </span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>[<span class="dv">53</span>] stringi_1.<span class="fl">6.2</span>       yaml_2.<span class="fl">2.1</span>          carData_3<span class="fl">.0</span><span class="dv">-4</span>       grid_4.<span class="fl">0.5</span>         </span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>[<span class="dv">57</span>] parallel_4.<span class="fl">0.5</span>      crayon_1.<span class="fl">4.1</span>        lattice_0<span class="fl">.20</span><span class="dv">-44</span>     cowplot_1.<span class="fl">1.1</span>      </span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a>[<span class="dv">61</span>] haven_2.<span class="fl">4.1</span>         hms_1.<span class="fl">1.0</span>           knitr_1<span class="fl">.33</span>          pillar_1.<span class="fl">6.1</span>       </span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>[<span class="dv">65</span>] ggsignif_0.<span class="fl">6.2</span>      reprex_2.<span class="fl">0.0</span>        glue_1.<span class="fl">4.2</span>          evaluate_0<span class="fl">.14</span>      </span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a>[<span class="dv">69</span>] data.table_1.<span class="fl">14.0</span>   BiocManager_1.<span class="fl">30.16</span> modelr_0.<span class="fl">1.8</span>        vctrs_0.<span class="fl">3.8</span>        </span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a>[<span class="dv">73</span>] cellranger_1.<span class="fl">1.0</span>    gtable_0.<span class="fl">3.0</span>        assertthat_0.<span class="fl">2.1</span>    cachem_1.<span class="fl">0.5</span>       </span>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a>[<span class="dv">77</span>] xfun_0<span class="fl">.24</span>           openxlsx_4.<span class="fl">2.4</span>      broom_0.<span class="fl">7.8</span>         rstatix_0.<span class="fl">7.0</span>      </span>
+<span id="cb19-43"><a href="#cb19-43" aria-hidden="true" tabindex="-1"></a>[<span class="dv">81</span>] ragg_1.<span class="fl">1.3</span>          memoise_2.<span class="fl">0.0</span>       ellipsis_0.<span class="fl">3.2</span>     </span></code></pre></div>
 </div>
   </div>
 
@@ -398,5 +447,10 @@ icm_top </div>
 </div>
 
       </footer>
-</body>
+</div>
+
+  
+
+
+  </body>
 </html>
