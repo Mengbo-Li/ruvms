@@ -47,7 +47,7 @@ that measures the closeness among technical replicates.
 }
 \details{
 The assumption of TRA plots is that if all unwanted variations are
-effectively removed, replica- tions of a unique effective sample are
+effectively removed, replications of a unique effective sample are
 identical after normalisation, even if we do not declare them as replicates
 of each other
 }

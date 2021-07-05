@@ -40,12 +40,12 @@
 
 
 <meta property="og:title" content="Calculate pooled standard deviations for each protein with missing data — pooled.sd" />
-<meta property="og:description" content="The pooled.sd function calculates pooled standard deviations in each
-protein within technical replicates while accommodating possible missing
+<meta property="og:description" content="The pooled.sd function calculates the pooled standard deviation in
+each protein within technical replicates while accommodating possible missing
 data. When there is not enough replicates to calculate pooled standard
-deviations (number of non-NA samples is less than or equal to number of
+deviations (number of non-missing samples is less than or equal to number of
 groups for example), a simple sample standard deviation is used.
-This step is needed when standardise = TRUE in ruvms." />
+This step is needed when standardise is enabled in ruvms." />
 
 
 
@@ -122,12 +122,12 @@ This step is needed when standardise = TRUE in ruvms." />
     </div>
 
     <div class="ref-description">
-    <p>The <code>pooled.sd</code> function calculates pooled standard deviations in each
-protein within technical replicates while accommodating possible missing
+    <p>The <code>pooled.sd</code> function calculates the pooled standard deviation in
+each protein within technical replicates while accommodating possible missing
 data. When there is not enough replicates to calculate pooled standard
-deviations (number of non-NA samples is less than or equal to number of
+deviations (number of non-missing samples is less than or equal to number of
 groups for example), a simple sample standard deviation is used.
-This step is needed when <code>standardise = TRUE</code> in <code>ruvms</code>.</p>
+This step is needed when <code>standardise</code> is enabled in <code>ruvms</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>pooled.sd</span><span class='op'>(</span><span class='va'>Y</span>, <span class='va'>M</span><span class='op'>)</span></pre>
@@ -137,8 +137,8 @@ This step is needed when <code>standardise = TRUE</code> in <code>ruvms</code>.<
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>Y</th>
-      <td><p>The m-by-n data matrix with samples on the rows and measurements (
-proteins etc.) on the columns. Missing data (NAs) are allowed.</p></td>
+      <td><p>The m-by-n data matrix with samples on the rows and measurements
+(proteins etc. ) on the columns. Missing data (NAs) are allowed.</p></td>
     </tr>
     <tr>
       <th>M</th>

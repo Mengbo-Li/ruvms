@@ -26,7 +26,7 @@ and n is the number of measurements.}
 \item{M}{The replication structure matrix. See \code{ruv::RUVIII} for
 details.}
 
-\item{ctl}{A logical vector of length n indication the negative control
+\item{ctl}{A logical vector of length n indicating the negative control
 measurements (peptides, proteins or metabolites).}
 
 \item{k1}{Tuning parameter. Default is 0.}

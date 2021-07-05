@@ -9,7 +9,7 @@
 #' @param M The replication structure matrix. See \code{ruv::RUVIII} for
 #' details.
 #'
-#' @param ctl A logical vector of length n indication the negative control
+#' @param ctl A logical vector of length n indicating the negative control
 #' measurements (peptides, proteins or metabolites).
 #'
 #' @param k1 Tuning parameter. Default is 0.
