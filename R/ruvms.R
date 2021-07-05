@@ -129,9 +129,7 @@ ruvms <- function (Y,
 
    if (average) {
       Y <- do.call(rbind, lapply(1:ncol(M),
-                                 function(i) colMeans(Y[M[, i] == 1, ,
-                                                        drop = FALSE],
-                                                      na.rm = TRUE)))
+                                 function(i) colMeans(Y[M[, i] == 1, , drop = FALSE], na.rm = TRUE)))
       rownames(Y) <- colnames(M)
    }
 
