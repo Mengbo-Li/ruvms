@@ -63,7 +63,7 @@ require(Matrix)
 The Sydney Heart Bank (SHB) proteomics data are loaded with corresponding sample information. 
 
 ```{r}
-data("shb_proteomics", package = "ruvms")
+data("shb", package = "ruvms")
 dim(raw)
 raw[1:5, 1:5]
 dim(smpinfo)
