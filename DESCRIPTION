@@ -2,17 +2,22 @@ Package: ruvms
 Type: Package
 Title: Removing Unwanted Variations in Mass-Spectrometry Data. 
 Version: 0.1.0
-Author: Mengbo Li
-Maintainer: Mengbo Li <li.me@wehi.edu.au>
+Authors@R:  
+    c(person("Mengbo", "Li", 
+            email = "mengboli103@gmail.com", 
+            role = c("aut", "cre")))
+Maintainer: Mengbo Li <mengboli103@gmail.com>
 Description: ruvms is a normalisation method for high-dimensional
    mass-spectrometry data which allows missing values in the raw data input.
+   The ruvms method uses negative control features and technical replicates to
+   remove unwanted variations in samples. 
 License: GPL-2.0 License
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.6)
-Imports: Rfast
-Suggests: knitr, markdown
-biocViews: MassSpectrometry, DataNormalisation
+Imports: Rfast, ruv, Matrix
+Suggests: knitr, markdown, tidyverse, naniar, limma
+biocViews: MassSpectrometry, DataNormalisation, MissingData
 VignetteBuilder: knitr
 URL: https://github.com/Mengbo-Li/ruvms
 RoxygenNote: 7.1.1

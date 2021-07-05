@@ -1,28 +1,28 @@
-#' Log2 transformed LFQ intensity measurements of the embryonic stem cell (ESC)
-#' proteomes post epiblast-like cell induction
+#' Proteomics data as raw LFQ intensities on the Sydney Heart Bank (SHB) cohort.
 #'
-#' Processed log2 transformed LFQ intensities of the ESC data set with sample
-#' information. 
+#' LFQ intensities of the SHB proteomics data set with sample information.
 #'
 #' @docType data
 #'
-#' @format Matrix of log2 intensities and sample inforamation in a data frame.
+#' @format Matrix of raw LFQ intensities with sample information as a data
+#' frame.
 #' \describe{
-#' \item{esc}{Log2-transformed LFQ intensities. }
+#' \item{raw}{LFQ intensities. }
 #' \item{smpinfo}{Sample information. }
 #' }
 #'
 #' @usage
-#' data(c("esc", "smpinfo"), package = "brainClass")
+#' data("shb", package = "ruvms")
 #'
 #' @references
-#' Yang, P., Humphrey, S. J., Cinghu, S., Pathania, R., Oldfield, A. J., Kumar,
-#' D., ... & Jothi, R. (2019). Multi-omic profiling reveals dynamics of the
-#' phased progression of pluripotency. \emph{Cell systems}, 8(5), 427-445.
+#' Li, M., Parker, B. L., Pearson, E., Hunter, B., Cao, J., Koay, Y. C., ... &
+#' O’Sullivan, J. F. (2020). Core functional nodes and sex-specific pathways in
+#' human ischaemic and dilated cardiomyopathy. \emph{Nature communications},
+#' 11(1), 1-12.
 #'
 #' @examples
-#' data(c("esc", "smpinfo"), package = "brainClass")
-#' esc[1:5, 1:5]
-#' smpinfo
-"esc"
+#' data("shb", package = "ruvms")
+#' raw[1:5, 1:5]
+#' head(smpinfo)
+"raw"
 "smpinfo"

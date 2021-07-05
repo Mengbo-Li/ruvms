@@ -1,0 +1,263 @@
+---
+title: '*ruvms*: Get started'
+author: 
+- name: Mengbo Li
+  affiliation: School of Mathematics and Statistics, The University of Sydney, Australia
+output:
+  BiocStyle::html_document:
+    toc_float: true
+package: BiocStyle
+vignette: >
+    %\VignetteEngine{knitr::knitr}
+    %\VignetteIndexEntry{*ruvms*: Get started}
+    %\usepackage[UTF-8]{inputenc}
+    %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+options(width = 100, digits = 3)
+knitr::opts_chunk$set(collapse = TRUE, 
+                      comment = "#>", 
+                      echo = TRUE, 
+                      cache = FALSE, 
+                      prompt = FALSE,
+                      tidy = TRUE,
+                      comment = NA, 
+                      message = FALSE, 
+                      warning = FALSE, 
+                      tidy = TRUE, 
+                      tidy.opts = list(width.cutoff = 60),
+                      fig.width = 7, 
+                      fig.height = 5, 
+                      dev = "png")
+```
+
+
+# Overview
+
+Here we present an example of the *ruvms* workflow that includes data normalisation and a simple downstream differential expression analysis using the Sydney Heart Bank (SHB) proteomics data. 
+
+# Install `ruvms`
+
+```{r, eval = FALSE}
+# install.packages("devtools")
+devtools::install_github("Mengbo-Li/ruvms")
+```
+
+# Load packages
+
+```{r}
+library(tidyverse)
+library(RColorBrewer)
+library(naniar)
+library(ggpubr)
+library(ruvms)
+library(limma)
+library(DT)
+require(ruv)
+require(Rfast)
+require(Matrix)
+```
+
+# Load data
+
+The Sydney Heart Bank (SHB) proteomics data are loaded with corresponding sample information. 
+
+```{r}
+data("shb_proteomics", package = "ruvms")
+dim(raw)
+raw[1:5, 1:5]
+dim(smpinfo)
+head(smpinfo)
+```
+
+
+# Pre-processing and data normalisation
+
+Here we demonstrate the workflow using the SHB proteomics data. 
+
+(0.1) Log2 transformation
+
+```{r}
+raw <- log2(raw)
+raw[1:5, 1:5]
+```
+
+(0.2) Missing data patterns
+
+- Total proportion of missingness: 
+
+```{r}
+sum(is.na(raw)) / length(raw)
+```
+
+- Missingness in samples:
+
+```{r}
+ggplot(data.frame(x = colSums(is.na(raw))), aes(x = x)) + 
+  geom_histogram(bins = 20) + 
+  labs(x = "Number of NA observations", y = "Count") + 
+  ggtitle("Number of NAs in each protein (n = 73)")
+```
+
+- Missingness by proteins:
+
+```{r}
+ggplot(data.frame(x = rowSums(is.na(raw))/ncol(raw)), aes(x = x)) + 
+  geom_histogram(bins = 10) + 
+  labs(x = "Proportion of NA proteins", y = "Count") + 
+  ggtitle("Proportion of NA proteins in each sample (p = 3,263)")
+```
+
+
+
+1. Choosing negative control measurements. 
+
+Here, we use the low sample variance proteins as the negative controls: 
+
+```{r}
+ctl <- colVars(raw) <= quantile(colVars(raw, na.rm = TRUE), probs = 0.25, na.rm = TRUE)
+table(ctl)
+```
+
+2. Identify the replication structure
+
+The SHB data set contains 70 samples, where 7 of them have one replicate. 
+
+```{r}
+sum(duplicated(smpinfo$locBank))
+M <- replicate.matrix(smpinfo$locBank)
+rownames(M) <- smpinfo$locBank
+dim(M)
+```
+
+3. Perform `ruvms` normalisation
+
+```{r}
+normed <- ruvms(raw, M, ctl)
+normed[1:5, 1:5]
+```
+
+
+## Diagnostics
+
+(i) PCA 
+
+Normalisation is performed on the data set with missingness, but PCA is produced by subsetting the raw and normalised data to complete subsets. 
+
+```{r, fig.width=12, fig.height=5}
+gg_additions_heart <- list(aes(color = smpinfo$condition, shape = smpinfo$location, size = 4), 
+                           labs(color = "Condition", shape = "Location"), 
+                           scale_size_identity(guide = "none"), 
+                           guides(color = guide_legend(override.aes = list(size = 4)),
+                                  shape = guide_legend(override.aes = list(size = 4))), 
+                           scale_color_manual(values = brewer.pal(3, "Dark2")))
+ggPCA <- function(data) {
+  pcs <- data.frame(prcomp(data)$x)
+  ggplot(pcs, aes(x = PC1, y = PC2)) + geom_point() + gg_additions_heart + theme_classic()
+}
+
+pca_raw <- ggPCA(raw[, colSums(is.na(raw)) == 0]) + ggtitle("Raw data")
+pca_norm <- ggPCA(normed[, colSums(is.na(normed)) == 0]) + ggtitle("Normalised data")
+ggarrange(pca_raw, pca_norm, ncol = 2)
+```
+
+It is shown that conditions in `ruvms` normalised data are better separated. 
+
+(ii) RLA
+
+```{r, fig.width=13, fig.height=4}
+par(mfrow = c(1, 2))
+RLA(raw, repCol = brewer.pal(3, "Dark2")[smpinfo$condition], repLabel = unique(smpinfo$condition), 
+    title = "Raw data", ylim = c(-3, 3), guides = seq(-3, 3))
+RLA(normed, repCol = brewer.pal(3, "Dark2")[smpinfo$condition], repLabel = unique(smpinfo$condition), 
+    title = "Normalised data", ylim = c(-3, 3), guides = seq(-3, 3))
+```
+
+Ideally, given a properly normalised data matrix, RLA boxplots are expected to be aligned around zero, and the widths of the boxplots should be relatively narrow and concordant with each other. We can see in our example, not only are the RLA boxplots better aligned at zero, but the widths of the of the boxplots are shrinked and more concordant post normalisation. 
+
+(iii) TRA
+
+TRA boxplots measure the similarity among replications of the same effective sample. The widths of TRA boxplots are proportional to variations among technical replicates. Provided effective removal of unwanted variations from data, technical replicates are expected to be identical after normalisation. 
+
+The `ruvms` normalisation makes technical replications the same, thereby the widths of the TRA boxplots are zero after normalisation. 
+
+```{r, fig.width=8, fig.height=4}
+par(mfrow = c(1, 2))
+smp_w_rep <- which(rowSums(M[, colSums(M) == 2]) == 1)
+smp_w_rep <- filter(smpinfo, locBank %in% names(smp_w_rep)) %>% arrange(locBank)
+smp_w_rep
+
+TRA(raw[smp_w_rep$ind, ], replicates = smp_w_rep$locBank, ylim = c(0, 2.2), title = "Raw data")
+TRA(normed[smp_w_rep$ind, ], replicates = smp_w_rep$locBank, ylim = c(0, 2.2), title = "Normalised data")
+```
+
+To further demonstrate the use of TRA plots, we also visualise the variations among the same condition, that is, Donors, DCMs and ICMs. 
+
+```{r, fig.width=7, fig.height=4}
+par(mfrow = c(1, 2))
+TRA(raw, replicates = smpinfo$condition, col = brewer.pal(3, "Dark2"), title = "Raw data", ylim = c(0, 0.6))
+TRA(normed, replicates = smpinfo$condition, col = brewer.pal(3, "Dark2"), title = "Normalised data", ylim = c(0, 0.6))
+```
+
+We can see that the variations within the same condition are reduced after normalisation. 
+
+Something extra: In `ruv::RUVIII`, the `k` parameter determines the amount of adjustment performed on the raw data set. The TRA plots are also useful to show that the larger `k` is, the more similar technical replications are after normalisation. That is, the heights of the TRA boxplots become smaller as `k` increases to its maximum. 
+
+(iv) MDA plots
+
+The MDA plots shows how the median of each measurement shifts before and after normalisation. MDA plots are useful for the selection of the `lambda` parameter when `standardise` is disabled: 
+
+```{r, fig.width=7, fig.height=4}
+par(mfrow = c(1, 2))
+ruvms_lambda0 <- ruvms(raw, M, ctl, standardise = FALSE, lambda = 0)
+MDA(raw, ruvms_lambda0, outline = TRUE, guides = 0, title = "lambda = 0")
+ruvms_w_lambda <- ruvms(raw, M, ctl, standardise = FALSE)
+MDA(raw, ruvms_w_lambda, outline = TRUE, guides = 0, title = "lambda = 1e-5")
+```
+
+We can see that there are huge shifts in the range of each protein after normalisation when there is no $lambda$-regularisation. A very small $lambda$-regularisation helps. 
+
+
+
+
+# Differential expression analysis
+
+With normalised data, we then perform a simple differential expression analysis on the disease conditions. The factor of interest is the disease conditions, including the healthy donors (Donor), DCM hearts and ICM hearts. We are interested in the differentially abundant proteins in DCM and ICM versus Donor hearts respectively. 
+
+```{r}
+normed_avg <- ruvms(raw, M, ctl, average = TRUE)
+effective_smp <- filter(smpinfo, !duplicated(locBank)) %>% arrange(locBank)
+
+design <- model.matrix(~ 0 + condition + location, data = effective_smp)
+contrasts <- makeContrasts(DCM = conditionDCM - conditionDonor, 
+                           ICM = conditionICM - conditionDonor,
+                           levels = design)
+
+fit <- lmFit(t(normed_avg), design)
+cfit <- contrasts.fit(fit, contrasts = contrasts)
+efit <- eBayes(cfit)
+
+dcm_top <- signif(topTable(efit, coef = "DCM", number = 20), 2)
+datatable(dcm_top, caption = "Top 20 differentially abundant proteins in DCM hearts versus healthy donors")
+
+icm_top <- signif(topTable(efit, coef = "ICM", number = 20), 2)
+datatable(icm_top, caption = "Top 20 differentially abundant proteins in ICM hearts versus healthy donors")
+```
+
+
+
+
+# References
+
+Li, M., Parker, B. L., Pearson, E., Hunter, B., Cao, J., Koay, Y. C., ... & O’Sullivan, J. F. (2020). Core functional nodes and sex-specific pathways in human ischaemic and dilated cardiomyopathy. *Nature communications*, 11(1), 1-12.
+
+Ritchie, M. E., Phipson, B., Wu, D. I., Hu, Y., Law, C. W., Shi, W., & Smyth, G. K. (2015). limma powers differential expression analyses for RNA-sequencing and microarray studies. *Nucleic acids research*, 43(7), e47-e47.
+
+
+# Session information
+
+```{r}
+sessionInfo()
+```
+

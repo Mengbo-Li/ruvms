@@ -10,31 +10,37 @@ ruvms(
   ctl,
   k1 = 0,
   lambda = 1e-05,
+  standardise = TRUE,
+  delta = NULL,
   eta = NULL,
   include.intercept = TRUE,
   average = FALSE,
   return.info = FALSE,
-  input.check = FALSE
+  inputcheck = FALSE
 )
 }
 \arguments{
 \item{Y}{The data. An m-by-n matrix, where m is the number of observations
 and n is the number of measurements.}
 
-\item{M}{The replication structure matrix.}
+\item{M}{The replication structure matrix. See \code{ruv::RUVIII} for
+details.}
 
 \item{ctl}{A logical vector of length n indication the negative control
-measurements.}
+measurements (peptides, proteins or metabolites).}
 
-\item{k1}{}
+\item{k1}{Tuning parameter. Default is 0.}
 
-\item{lambda}{}
+\item{lambda}{Tuning parameter. Default is 1e-5, only needed when
+\code{standardise} is \code{FALSE}.}
 
-\item{eta}{Column-wise (e.g., protein-wise) covariates.}
+\item{eta}{Column-wise (e.g., protein-wise) covariates. See \code{ruv::RUVI}
+for more.}
 
-\item{include.intercept}{Logical.}
+\item{include.intercept}{Logical. See \code{ruv::RUVI} for more.}
 
-\item{average}{Logical.}
+\item{average}{Logical, whether to return averaged replicates after
+normalisation.}
 
 \item{return.info}{Logical. If \code{FALSE}, only the adjusted data matrix
 is returned. If \code{TRUE}, additional information is returned (see below).}
@@ -48,6 +54,8 @@ returned. Otherwise a list is returned which contains \tabular{llllll}{
 \code{di} \tab \tab \tab \tab \tab Eigenvalues of the N matrix. \cr
 \code{hi} \tab \tab \tab \tab \tab hi values in the generalised averging
 operator. \cr
+\code{delta} \tab \tab \tab \tab \tab The delta tuning parameter. \cr
+\code{lambda} \tab \tab \tab \tab \tab The lambda tuning parameter. \cr
 }
 }
 \description{
@@ -55,7 +63,8 @@ The `ruvms` function performs an `ruv::RUVIII` like normalisation on
 mass-spectrometry data while allowing missing values (NAs) in input data.
 }
 \examples{
-## Not run
+
+# See vignettes.
 
 }
 \seealso{
