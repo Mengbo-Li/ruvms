@@ -16,13 +16,15 @@
 #'
 #' @export
 pooled.sd <- function(Y, M) {
+   if(!requireNamespace("Rfast", quietly = TRUE))
+      stop("Rfast package required but is not installed (or can't be loaded)")
    group.df <- (t(M) %*% !is.na(Y)) - 1
    group.df <- ifelse(group.df < 0, 0, group.df)
-   group.var <- do.call(cbind, lapply(1:ncol(M), function(i) colVars(Y[M[, i] == 1, , drop = FALSE], na.rm = TRUE)))
+   group.var <- do.call(cbind, lapply(1:ncol(M), function(i) Rfast::colVars(Y[M[, i] == 1, , drop = FALSE], na.rm = TRUE)))
    group.var[is.na(group.var)] <- 0
    var.j <- diag(group.var %*% group.df / colSums(group.df))
    if (any(is.na(var.j)))
-      var.j[is.na(var.j)] <- colVars(Y[, is.na(var.j), drop = FALSE], na.rm = TRUE)
+      var.j[is.na(var.j)] <- Rfast::colVars(Y[, is.na(var.j), drop = FALSE], na.rm = TRUE)
    if (any(is.na(var.j)))
       var.j[is.na(var.j)] <- 0
    sqrt(var.j)

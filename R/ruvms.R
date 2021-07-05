@@ -103,7 +103,7 @@ ruvms <- function (Y,
       if (standardise & min(di) <= 0 & is.null(delta))
          delta <- 0.1^floor(-log10(-min(di)))
       U <- decomp$vectors
-      k2 <- (1 - Matrix::rankMatrix(Y[, ctl])/2/m) * rankMatrix(Y[, ctl])
+      k2 <- (1 - Matrix::rankMatrix(Y[, ctl])/2/m) * Matrix::rankMatrix(Y[, ctl])
       hi <- sapply(1:length(di), function(i)
          I(i > k1) * min(1/(di[i] + delta) + lambda,
                          1/(di[k2] + delta) + lambda))
