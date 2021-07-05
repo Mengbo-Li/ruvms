@@ -96,7 +96,7 @@ sum(is.na(raw)) / length(raw)
 ggplot(data.frame(x = colSums(is.na(raw))), aes(x = x)) + 
   geom_histogram(bins = 20) + 
   labs(x = "Number of NA observations", y = "Count") + 
-  ggtitle("Number of NAs in each protein (n = 73)")
+  ggtitle("Number of NAs in each protein (n = 57)")
 ```
 
 - Missingness by proteins:
@@ -145,11 +145,10 @@ normed[1:5, 1:5]
 Normalisation is performed on the data set with missingness, but PCA is produced by subsetting the raw and normalised data to complete subsets. 
 
 ```{r, fig.width=12, fig.height=5}
-gg_additions_heart <- list(aes(color = smpinfo$condition, shape = smpinfo$location, size = 4), 
-                           labs(color = "Condition", shape = "Location"), 
+gg_additions_heart <- list(aes(color = smpinfo$condition, size = 4), 
+                           labs(color = "Condition"), 
                            scale_size_identity(guide = "none"), 
-                           guides(color = guide_legend(override.aes = list(size = 4)),
-                                  shape = guide_legend(override.aes = list(size = 4))), 
+                           guides(color = guide_legend(override.aes = list(size = 4))), 
                            scale_color_manual(values = brewer.pal(3, "Dark2")))
 ggPCA <- function(data) {
   pcs <- data.frame(prcomp(data)$x)
@@ -168,9 +167,9 @@ It is shown that conditions in `ruvms` normalised data are better separated, esp
 ```{r, fig.width=13, fig.height=4}
 par(mfrow = c(1, 2))
 RLA(raw, repCol = brewer.pal(3, "Dark2")[smpinfo$condition], repLabel = unique(smpinfo$condition), 
-    title = "Raw data", ylim = c(-3, 3), guides = seq(-3, 3))
+    title = "Raw data", ylim = c(-3, 3), guides = seq(-2, 2))
 RLA(normed, repCol = brewer.pal(3, "Dark2")[smpinfo$condition], repLabel = unique(smpinfo$condition), 
-    title = "Normalised data", ylim = c(-3, 3), guides = seq(-3, 3))
+    title = "Normalised data", ylim = c(-3, 3), guides = seq(-2, 2))
 ```
 
 Ideally, given a properly normalised data matrix, RLA boxplots are expected to be aligned around zero, and the widths of the boxplots should be relatively narrow and concordant with each other. We can see in our example, not only are the RLA boxplots better aligned at zero, but the widths of the of the boxplots are shrinked and more concordant post normalisation. 
@@ -195,8 +194,10 @@ To further demonstrate the use of TRA plots, we also visualise the variations am
 
 ```{r, fig.width=7, fig.height=4}
 par(mfrow = c(1, 2))
-TRA(raw, replicates = smpinfo$condition, col = brewer.pal(3, "Dark2"), title = "Raw data", ylim = c(0, 0.6))
-TRA(normed, replicates = smpinfo$condition, col = brewer.pal(3, "Dark2"), title = "Normalised data", ylim = c(0, 0.6))
+TRA(raw, replicates = smpinfo$condition, col = brewer.pal(3, "Dark2"), 
+    title = "Raw data", ylim = c(0, 0.65), guides = c(0, 0.3))
+TRA(normed, replicates = smpinfo$condition, col = brewer.pal(3, "Dark2"), 
+    title = "Normalised data",ylim = c(0, 0.65), guides = c(0, 0.3))
 ```
 
 We can see that the variations within the same condition are reduced after normalisation. 
@@ -228,7 +229,7 @@ With normalised data, we then perform a simple differential expression analysis 
 normed_avg <- ruvms(raw, M, ctl, average = TRUE)
 effective_smp <- filter(smpinfo, !duplicated(locBank)) %>% arrange(locBank)
 
-design <- model.matrix(~ 0 + condition + location, data = effective_smp)
+design <- model.matrix(~ 0 + condition, data = effective_smp)
 contrasts <- makeContrasts(DCM = conditionDCM - conditionDonor, 
                            ICM = conditionICM - conditionDonor,
                            levels = design)
