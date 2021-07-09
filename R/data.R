@@ -1,4 +1,4 @@
-#' Proteomics data as raw LFQ intensities on the Sydney Heart Bank (SHB) cohort.
+#' Proteomics data as raw LFQ intensities on the Sydney Heart Bank (SHB) cohort
 #'
 #' LFQ intensities of the SHB proteomics data set with sample information.
 #'

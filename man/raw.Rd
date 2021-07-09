@@ -3,7 +3,7 @@
 \docType{data}
 \name{raw}
 \alias{raw}
-\title{Proteomics data as raw LFQ intensities on the Sydney Heart Bank (SHB) cohort.}
+\title{Proteomics data as raw LFQ intensities on the Sydney Heart Bank (SHB) cohort}
 \format{
 Matrix of raw LFQ intensities with sample information as a data
 frame.
