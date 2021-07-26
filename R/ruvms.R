@@ -92,7 +92,6 @@ ruvms <- function (Y,
       sd.j <- pooled.sd(Y, M)
       jump.j <- which(sd.j == 0)
       Y[, -jump.j] <- sweep(Y[, -jump.j], 2, sd.j[-jump.j], "/")
-      Y[is.nan(Y)] <- 0
       lambda <- 0
    } else jump.j <- NULL
 
