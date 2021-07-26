@@ -55,7 +55,7 @@ TRA <- function(data,
             replicates <- replicates[M == 1]
          }
    vars.in.replicates <- do.call(cbind, lapply(unique(replicates), function(ri)
-      Rfast::colVars(data[replicates == ri, ])))
+      Rfast::colVars(data[replicates == ri, , drop = FALSE])))
    colnames(vars.in.replicates) <- paste("TR", unique(replicates), sep = "~")
    boxplot(vars.in.replicates,
            outline = FALSE, boxfill = col, xaxt = "none", ylim = ylim)
