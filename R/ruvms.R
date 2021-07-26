@@ -90,10 +90,11 @@ ruvms <- function (Y,
       mu.j <- colMeans(Y, na.rm = TRUE)
       Y <- sweep(Y, 2, mu.j, "-")
       sd.j <- pooled.sd(Y, M)
-      Y <- sweep(Y, 2, sd.j, "/")
+      jump.j <- which(sd.j == 0)
+      Y[, -jump.j] <- sweep(Y[, -jump.j], 2, sd.j[-jump.j], "/")
       Y[is.nan(Y)] <- 0
       lambda <- 0
-   }
+   } else jump.j <- NULL
 
    if (ncol(M) < m) {
       decomp <- eigen(Y[, ctl] %*% t(Y[, ctl]))
@@ -109,23 +110,23 @@ ruvms <- function (Y,
                          1/(di[k2] + delta) + lambda))
 
       for (j in 1:ncol(Y)) {
-         keep <- !is.na(Y[, j])
-         Mj <- M[keep, , drop = FALSE]
-         Mj <- Mj[, colSums(Mj) > 0, drop = FALSE]
-         Uj <- U[keep, , drop = FALSE]
-         Y[keep, j] <- Mj %*%
-            solve(t(Mj) %*% Uj %*% diag(hi) %*% t(Uj) %*% Mj) %*%
-            t(Mj) %*% Uj %*% diag(hi) %*% t(Uj) %*% Y[keep, j]
+         if (j %in% jump.j) {
+            Y[, j] <- Y[, j] + mu.j[j]
+         } else {
+            keep <- !is.na(Y[, j])
+            Mj <- M[keep, , drop = FALSE]
+            Mj <- Mj[, colSums(Mj) > 0, drop = FALSE]
+            Uj <- U[keep, , drop = FALSE]
+            Y[keep, j] <- Mj %*%
+               solve(t(Mj) %*% Uj %*% diag(hi) %*% t(Uj) %*% Mj) %*%
+               t(Mj) %*% Uj %*% diag(hi) %*% t(Uj) %*% Y[keep, j]
+            if (standardise) Y[, j] <- Y[, j] * sd.j[j] + mu.j[j]
+         }
       }
    } else {stop("Not enough replications!")}
 
    if (!is.null(eta))
       Y <- Y + adjustments
-
-   if (standardise) {
-      Y <- sweep(Y, 2, sd.j, "*")
-      Y <- sweep(Y, 2, mu.j, "+")
-   }
 
    if (average) {
       Y <- do.call(rbind, lapply(1:ncol(M),
