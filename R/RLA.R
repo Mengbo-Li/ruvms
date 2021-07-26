@@ -40,7 +40,7 @@ RLA <- function(data,
                 ylim = NULL,
                 guides = NULL,
                 title = NULL) {
-   y_med <- t(sweep(data, 2, colMedians(data, na.rm = TRUE), "-"))
+   y_med <- t(sweep(data, 2, Rfast::colMedians(data, na.rm = TRUE), "-"))
    if (is.null(smpID)) smpID <- rownames(data) else y_med <- y_med[, smpID]
    boxplot(y_med, outline = FALSE, boxfill = repCol, xaxt = "none", ylim = ylim)
    abline(h = 0, col = "darkgrey", lty = 2)
