@@ -25,7 +25,5 @@ pooled.sd <- function(Y, M) {
    var.j <- diag(group.var %*% group.df / colSums(group.df))
    if (any(is.na(var.j)))
       var.j[is.na(var.j)] <- Rfast::colVars(Y[, is.na(var.j), drop = FALSE], na.rm = TRUE)
-   if (any(is.na(var.j)))
-      var.j[is.na(var.j)] <- 0
    sqrt(var.j)
 }

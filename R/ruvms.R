@@ -79,6 +79,8 @@ ruvms <- function (Y,
               Please ensure that rows correspond to observations
               (e.g. sample ID) and columns correspond to features
               (e.g. proteins).")
+      if (any(is.nan(Y)))
+         Y[is.nan(Y)] <- NA
    }
 
    if (!is.null(eta)) {
@@ -90,7 +92,7 @@ ruvms <- function (Y,
       mu.j <- colMeans(Y, na.rm = TRUE)
       Y <- sweep(Y, 2, mu.j, "-")
       sd.j <- pooled.sd(Y, M)
-      jump.j <- which(sd.j == 0)
+      jump.j <- which(is.na(sd.j))
       Y[, -jump.j] <- sweep(Y[, -jump.j], 2, sd.j[-jump.j], "/")
       lambda <- 0
    } else jump.j <- NULL
@@ -110,6 +112,7 @@ ruvms <- function (Y,
 
       for (j in 1:ncol(Y)) {
          if (j %in% jump.j) {
+            # sd.j is NA, when there is only one observed value in a protein
             Y[, j] <- Y[, j] + mu.j[j]
          } else {
             keep <- !is.na(Y[, j])
@@ -131,6 +134,7 @@ ruvms <- function (Y,
       Y <- do.call(rbind, lapply(1:ncol(M),
                                  function(i) colMeans(Y[M[, i] == 1, , drop = FALSE], na.rm = TRUE)))
       rownames(Y) <- colnames(M)
+      Y[is.nan(Y)] <- NA
    }
 
    if (return.info) return(list(newY = Y, di = di, hi = hi,
