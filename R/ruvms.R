@@ -92,8 +92,9 @@ ruvms <- function (Y,
       mu.j <- colMeans(Y, na.rm = TRUE)
       Y <- sweep(Y, 2, mu.j, "-")
       sd.j <- pooled.sd(Y, M)
-      jump.j <- which(is.na(sd.j))
-      Y[, -jump.j] <- sweep(Y[, -jump.j], 2, sd.j[-jump.j], "/")
+      jump.j <- which(is.nan(sd.j))
+      adjust.j <- setdiff(1:n, jump.j)
+      Y[, adjust.j] <- sweep(Y[, adjust.j, drop = FALSE], 2, sd.j[adjust.j], "/")
       lambda <- 0
    } else jump.j <- NULL
 
@@ -110,7 +111,7 @@ ruvms <- function (Y,
          I(i > k1) * min(1/(di[i] + delta) + lambda,
                          1/(di[k2] + delta) + lambda))
 
-      for (j in 1:ncol(Y)) {
+      for (j in 1:n) {
          if (j %in% jump.j) {
             # sd.j is NA, when there is only one observed value in a protein
             Y[, j] <- Y[, j] + mu.j[j]
@@ -134,9 +135,9 @@ ruvms <- function (Y,
       Y <- do.call(rbind, lapply(1:ncol(M),
                                  function(i) colMeans(Y[M[, i] == 1, , drop = FALSE], na.rm = TRUE)))
       rownames(Y) <- colnames(M)
-      Y[is.nan(Y)] <- NA
    }
 
    if (return.info) return(list(newY = Y, di = di, hi = hi,
                                 delta = delta, lambda = lambda)) else return(Y)
 }
+
