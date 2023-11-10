@@ -25,6 +25,9 @@
 #'
 #' @param title Character. Title of the output plot.
 #'
+#' @param ... Extra parameters for text() for sample lable appearances. Eg,
+#' adj = 1.
+#'
 #' @return The RLA plot.
 #'
 #' @references
@@ -39,14 +42,14 @@ RLA <- function(data,
                 smpName = NULL,
                 ylim = NULL,
                 guides = NULL,
-                title = NULL) {
+                title = NULL, ...) {
    y_med <- t(sweep(data, 2, Rfast::colMedians(data, na.rm = TRUE), "-"))
    if (is.null(smpID)) smpID <- rownames(data) else y_med <- y_med[, smpID]
    boxplot(y_med, outline = FALSE, boxfill = repCol, xaxt = "none", ylim = ylim)
    abline(h = 0, col = "darkgrey", lty = 2)
    if (!is.null(smpName))
       text(1:length(smpID), label = smpName,
-           par("usr")[3], srt = 60, xpd = TRUE, adj = 1.4, cex = 0.6)
+           par("usr")[3], srt = 60, xpd = TRUE, cex = 0.6, ...)
    if (!is.null(guides))
       abline(h = guides, col = "darkgrey", lty = 2)
    if (!is.null(repLabel))
